@@ -31,7 +31,7 @@ To set up Novel locally, you'll need to clone the repository and set up the foll
 ## Tech Stack
 
 ChatFn is built on the following stack:
-- [openai-function-calling-tools](https://github.com/JohannLai/openai-function-calling-tools) - a library to make calling OpenAI functions calling easier
+- 🔥 [openai-function-calling-tools](https://github.com/JohannLai/openai-function-calling-tools) - a library to make calling OpenAI functions calling easier
 - [Next.js](https://nextjs.org/) – framework
 - [OpenAI Functions](https://platform.openai.com/docs/guides/gpt/function-calling) - AI completions
 - [Vercel AI SDK](https://sdk.vercel.ai/docs) – AI streaming library
@@ -42,8 +42,8 @@ ChatFn is built on the following stack:
 
 Here's how you can contribute:
 
-- [Open an issue](https://github.com/steven-tey/novel/issues) if you believe you've encountered a bug.
-- Make a [pull request](https://github.com/steven-tey/novel/pull) to add new features/make quality-of-life improvements/fix bugs.
+- [Open an issue](https://github.com/johannlai/chatFn/issues) if you believe you've encountered a bug.
+- Make a [pull request](https://github.com/johannlai/chatFn/pull) to add new features/make quality-of-life improvements/fix bugs.
 
 ## Author
 
