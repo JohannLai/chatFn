@@ -14,7 +14,7 @@ import { toast } from "sonner";
 const examples = [
   "What time is it in New York?",
   "Get me the top 5 stories on Hacker News in markdown table format. Use columns like title, link, score, and comments.",
-  "What is the top story on Hacker News right now?",
+  "What is the result of 100 * 100?",
 ];
 
 export default function Chat() {
