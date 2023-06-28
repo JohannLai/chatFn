@@ -59,7 +59,6 @@ export default function Chat() {
           <GithubIcon />
         </a>
       </div>
-      {JSON.stringify(messages)}
       {messages.length > 0 ? (
         messages.map((message, i) => (
           <div
