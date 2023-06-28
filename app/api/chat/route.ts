@@ -2,7 +2,24 @@ import { kv } from "@vercel/kv";
 import { Ratelimit } from "@upstash/ratelimit";
 import { Configuration, OpenAIApi } from "openai-edge";
 import { OpenAIStream, StreamingTextResponse } from "ai";
-import { functions, runFunction } from "./functions";
+// import { functions, runFunction } from "./functions";
+import {
+  createCalculator,
+  createClock,
+  createWebBrowser,
+  createGoogleCustomSearch,
+  createRequest,
+} from "openai-function-calling-tools";
+
+const { calculator, calculatorSchema } = createCalculator();
+const { clock, clockSchema } = createClock();
+const { request, requestSchema } = createRequest();
+const { webbrowser, webbrowserSchema } = createWebBrowser();
+const { googleCustomSearch, googleCustomSearchSchema } =
+  createGoogleCustomSearch({
+    apiKey: process.env.GOOGLE_API_KEY || "",
+    googleCSEId: process.env.GOOGLE_SEARCH_ENGINE_ID || "",
+  });
 
 // Create an OpenAI API client (that's edge friendly!)
 const config = new Configuration({
@@ -25,7 +42,7 @@ export async function POST(req: Request) {
     });
 
     const { success, limit, reset, remaining } = await ratelimit.limit(
-      `chathn_ratelimit_${ip}`,
+      `chatfn_ratelimit_${ip}`,
     );
 
     if (!success) {
@@ -42,11 +59,27 @@ export async function POST(req: Request) {
 
   const { messages } = await req.json();
 
+  const functions: {
+    [key: string]: (args: any) => Promise<any>;
+  } = {
+    calculator,
+    clock,
+    request,
+    webbrowser,
+    googleCustomSearch
+  };
+
   // check if the conversation requires a function call to be made
   const initialResponse = await openai.createChatCompletion({
     model: "gpt-3.5-turbo-0613",
     messages,
-    functions,
+    functions: [
+      calculatorSchema,
+      clockSchema,
+      requestSchema,
+      webbrowserSchema,
+      googleCustomSearchSchema
+    ],
     function_call: "auto",
   });
   const initialResponseJson = await initialResponse.json();
@@ -55,8 +88,18 @@ export async function POST(req: Request) {
   let finalResponse;
 
   if (initialResponseMessage.function_call) {
-    const { name, arguments: args } = initialResponseMessage.function_call;
-    const functionResponse = await runFunction(name, JSON.parse(args));
+    const { name, arguments: args }: {
+      name: string;
+      arguments: string;
+    } = initialResponseMessage.function_call;
+
+    const fn = functions[name];
+    const parsedArgs = JSON.parse(args);
+    const functionResponse = await fn(parsedArgs);
+
+    console.log('name:', name);
+    console.log('parsedArgs:', args);
+    console.log('function response:', functionResponse);
 
     finalResponse = await openai.createChatCompletion({
       model: "gpt-3.5-turbo-0613",
@@ -67,10 +110,13 @@ export async function POST(req: Request) {
         {
           role: "function",
           name: initialResponseMessage.function_call.name,
-          content: JSON.stringify(functionResponse),
+          content: JSON.stringify({ result: functionResponse }),
         },
       ],
     });
+
+    console.log('final response:', finalResponse);
+
     // Convert the response into a friendly text-stream
     const stream = OpenAIStream(finalResponse);
     // Respond with the stream
