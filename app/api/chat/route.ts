@@ -60,7 +60,8 @@ export async function POST(req: Request) {
   const { messages } = await req.json();
 
   const functions: {
-    [key: string]: (args: any) => Promise<any>;
+    // eslint-disable-next-line no-unused-vars
+    [key: string]: (params: any) => any;
   } = {
     calculator,
     clock,
