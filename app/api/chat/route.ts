@@ -2,7 +2,8 @@ import { kv } from "@vercel/kv";
 import { Ratelimit } from "@upstash/ratelimit";
 import { Configuration, OpenAIApi } from "openai-edge";
 import { OpenAIStream, StreamingTextResponse } from "ai";
-// import { functions, runFunction } from "./functions";
+import { ChatCompletionFunctions } from 'openai-edge/types/api'
+
 import {
   createCalculator,
   createClock,
@@ -11,11 +12,11 @@ import {
   createRequest,
 } from "openai-function-calling-tools";
 
-const { calculator, calculatorSchema } = createCalculator();
-const { clock, clockSchema } = createClock();
-const { request, requestSchema } = createRequest();
-const { webbrowser, webbrowserSchema } = createWebBrowser();
-const { googleCustomSearch, googleCustomSearchSchema } =
+const { calculatorSchema } = createCalculator();
+const { clockSchema } = createClock();
+const { requestSchema } = createRequest();
+const { webbrowserSchema } = createWebBrowser();
+const { googleCustomSearchSchema } =
   createGoogleCustomSearch({
     apiKey: process.env.GOOGLE_API_KEY || "",
     googleCSEId: process.env.GOOGLE_SEARCH_ENGINE_ID || "",
@@ -28,6 +29,31 @@ const config = new Configuration({
 const openai = new OpenAIApi(config);
 
 export const runtime = "edge";
+
+
+const functions: ChatCompletionFunctions[] = [
+  calculatorSchema,
+  clockSchema,
+  requestSchema,
+  webbrowserSchema,
+  googleCustomSearchSchema,
+  {
+    name: 'eval_code_in_browser',
+    description: 'Execute javascript code in the browser with eval().',
+    parameters: {
+      type: 'object',
+      properties: {
+        code: {
+          type: 'string',
+          description: `Javascript code that will be directly executed via eval(). Do not use backticks in your response.
+           DO NOT include any newlines in your response, and be sure to provide only valid JSON when providing the arguments object.
+           The output of the eval() will be returned directly by the function.`
+        }
+      },
+      required: ['code']
+    }
+  }
+];
 
 export async function POST(req: Request) {
   if (
@@ -57,89 +83,16 @@ export async function POST(req: Request) {
     }
   }
 
-  const { messages } = await req.json();
+  const { messages, function_call } = await req.json()
 
-  const functions: {
-    // eslint-disable-next-line no-unused-vars
-    [key: string]: (params: any) => any;
-  } = {
-    calculator,
-    clock,
-    request,
-    webbrowser,
-    googleCustomSearch
-  };
-
-  // check if the conversation requires a function call to be made
-  const initialResponse = await openai.createChatCompletion({
-    model: "gpt-3.5-turbo-0613",
+  const response = await openai.createChatCompletion({
+    model: 'gpt-3.5-turbo-16k',
+    stream: true,
     messages,
-    functions: [
-      calculatorSchema,
-      clockSchema,
-      requestSchema,
-      webbrowserSchema,
-      googleCustomSearchSchema
-    ],
-    function_call: "auto",
-  });
-  const initialResponseJson = await initialResponse.json();
-  const initialResponseMessage = initialResponseJson?.choices?.[0]?.message;
+    functions,
+    function_call
+  })
 
-  let finalResponse;
-
-  if (initialResponseMessage.function_call) {
-    const { name, arguments: args }: {
-      name: string;
-      arguments: string;
-    } = initialResponseMessage.function_call;
-
-    const fn = functions[name];
-    const parsedArgs = JSON.parse(args);
-    const functionResponse = await fn(parsedArgs);
-
-    console.log('name:', name);
-    console.log('parsedArgs:', args);
-    console.log('function response:', functionResponse);
-
-    finalResponse = await openai.createChatCompletion({
-      model: "gpt-3.5-turbo-16k",
-      stream: true,
-      messages: [
-        ...messages,
-        initialResponseMessage,
-        {
-          role: "function",
-          name: initialResponseMessage.function_call.name,
-          content: JSON.stringify({ result: functionResponse }),
-        },
-      ],
-    });
-
-    // Convert the response into a friendly text-stream
-    const stream = OpenAIStream(finalResponse);
-    // Respond with the stream
-    return new StreamingTextResponse(stream);
-  } else {
-    // if there's no function call, just return the initial response
-    // but first, we gotta convert initialResponse into a stream with ReadableStream
-    const chunks = initialResponseMessage.content.split(" ");
-    const stream = new ReadableStream({
-      async start(controller) {
-        for (const chunk of chunks) {
-          const bytes = new TextEncoder().encode(chunk + " ");
-          controller.enqueue(bytes);
-          await new Promise((r) =>
-            setTimeout(
-              r,
-              // get a random number between 10ms and 30ms to simulate a random delay
-              Math.floor(Math.random() * 20 + 10),
-            ),
-          );
-        }
-        controller.close();
-      },
-    });
-    return new StreamingTextResponse(stream);
-  }
+  const stream = OpenAIStream(response)
+  return new StreamingTextResponse(stream)
 }
