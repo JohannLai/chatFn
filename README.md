@@ -15,14 +15,11 @@
 </p>
 
 
-https://github.com/JohannLai/chatFn/assets/10769405/de765b48-ec48-43f4-affe-a098e34580d3
-
-
 ## Introduction
 
-ChatFn is an open-source AI chatbot that uses [OpenAI Functions](https://platform.openai.com/docs/guides/gpt/function-calling) and the [Vercel AI SDK](https://sdk.vercel.ai/docs)
+ChatFn is an open-source AI chatbot that uses [OpenAI Functions](https://platform.openai.com/docs/guides/gpt/function-calling), the [Vercel AI SDK](https://sdk.vercel.ai/docs) and [openai-function-calling-tools](https://github.com/JohannLai/openai-function-calling-tools) 
 
-
+https://github.com/JohannLai/chatFn/assets/10769405/de765b48-ec48-43f4-affe-a098e34580d3
 
 
 ## Setting Up Locally
