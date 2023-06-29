@@ -1,5 +1,5 @@
 <a href="https://chat-fn.vercel.app">
-  <img alt="Chat with Hacker News using natural language." src="/app/opengraph-image.png">
+  <img alt="Chat with Hacker News using natural language." src="assets/screenshot.png">
   <h1 align="center">ChatFn</h1>
 </a>
 
@@ -19,7 +19,7 @@
 
 ChatFn is an open-source AI chatbot that uses [OpenAI Functions](https://platform.openai.com/docs/guides/gpt/function-calling) and the [Vercel AI SDK](https://sdk.vercel.ai/docs)
 
-https://github.com/johannlai/chatFn/assets/28986134/9c0ad554-f4e5-4e98-8771-5999ddf79235
+https://github.com/johannlai/chatFn/assets/example.mp4
 
 
 ## Setting Up Locally

@@ -2,6 +2,7 @@
 
 import { useRef } from "react";
 import { useChat } from "ai/react";
+import { FunctionCallHandler, ChatRequest } from "ai";
 import va from "@vercel/analytics";
 import clsx from "clsx";
 import { GithubIcon, LoadingCircle, SendIcon } from "./icons";
@@ -21,7 +22,19 @@ export default function Chat() {
   const formRef = useRef<HTMLFormElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
 
+  const functionCallHandler: FunctionCallHandler = async (
+    chatMessages,
+    functionCall,
+  ) => {
+    console.log(123123123);
+    console.log(functionCall, chatMessages);
+    return {
+      messages: [...chatMessages],
+    };
+  };
+
   const { messages, input, setInput, handleSubmit, isLoading } = useChat({
+    experimental_onFunctionCall: functionCallHandler,
     onResponse: (response) => {
       if (response.status === 429) {
         toast.error("You have reached your request limit for the day.");
