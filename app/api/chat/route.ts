@@ -103,7 +103,7 @@ export async function POST(req: Request) {
     console.log('function response:', functionResponse);
 
     finalResponse = await openai.createChatCompletion({
-      model: "gpt-3.5-turbo-0613",
+      model: "gpt-3.5-turbo-16k",
       stream: true,
       messages: [
         ...messages,
@@ -115,8 +115,6 @@ export async function POST(req: Request) {
         },
       ],
     });
-
-    console.log('final response:', finalResponse);
 
     // Convert the response into a friendly text-stream
     const stream = OpenAIStream(finalResponse);
