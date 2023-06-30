@@ -268,9 +268,8 @@ export default function Chat() {
             rel="noopener noreferrer"
             className="transition-colors hover:text-black"
           >
-            View the repo
+            View the repo <GithubIcon />
           </a>{" "}
-          or .
         </p>
       </div>
     </main>

@@ -12,11 +12,11 @@ import {
   createRequest,
 } from "openai-function-calling-tools";
 
-const { calculatorSchema } = createCalculator();
-const { clockSchema } = createClock();
-const { requestSchema } = createRequest();
-const { webbrowserSchema } = createWebBrowser();
-const { googleCustomSearchSchema } =
+const [, calculatorSchema] = createCalculator();
+const [, clockSchema] = createClock();
+const [, requestSchema] = createRequest();
+const [, webbrowserSchema] = createWebBrowser();
+const [, googleCustomSearchSchema] =
   createGoogleCustomSearch({
     apiKey: process.env.GOOGLE_API_KEY || "",
     googleCSEId: process.env.GOOGLE_SEARCH_ENGINE_ID || "",
@@ -29,7 +29,6 @@ const config = new Configuration({
 const openai = new OpenAIApi(config);
 
 export const runtime = "edge";
-
 
 const functions: ChatCompletionFunctions[] = [
   calculatorSchema,
