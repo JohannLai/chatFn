@@ -40,22 +40,23 @@ export default function Chat() {
 
     if (name === "eval_code_in_browser") {
       result = JSON.stringify(eval(parsedFunctionCallArguments.code));
+    } else {
+      const response = await fetch("/api/functions", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(functionCall),
+      });
+
+      if (!response.ok) {
+        toast.error("Something went wrong.");
+        return;
+      }
+
+      result = await response.text();
     }
 
-    const response = await fetch("/api/functions", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(functionCall),
-    });
-
-    if (!response.ok) {
-      toast.error("Something went wrong.");
-      return;
-    }
-
-    result = await response.text();
     return {
       messages: [
         ...chatMessages,
@@ -158,7 +159,9 @@ export default function Chat() {
                   }}
                 >
                   {message.content === "" && message.function_call != undefined
-                    ? `Calling Function **${message.function_call}**`
+                    ? typeof message.function_call === "object"
+                      ? message.function_call.name
+                      : message.function_call
                     : message.content}
                 </ReactMarkdown>
               </div>
