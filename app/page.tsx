@@ -2,7 +2,7 @@
 
 import { useRef } from "react";
 import { useChat } from "ai/react";
-import { FunctionCallHandler, nanoid } from "ai";
+import { FunctionCallHandler, Message, nanoid } from "ai";
 import type { JSX } from "react";
 import va from "@vercel/analytics";
 import clsx from "clsx";
@@ -115,6 +115,20 @@ export default function Chat() {
     },
   };
 
+  const renderMessage = (message: Message) => {
+    if (message.content === "" && message.function_call != undefined) {
+      return typeof message.function_call === "object"
+        ? `
+**Function calling** \n
+- name: ${message.function_call.name || "--"} \n
+- args: ${message.function_call.arguments || "--"}
+        `
+        : message.function_call;
+    }
+
+    return message.content;
+  };
+
   return (
     <main className="flex flex-col items-center justify-between pb-40">
       <div className="absolute top-5 hidden w-full justify-between px-5 sm:flex">
@@ -158,11 +172,7 @@ export default function Chat() {
                     ),
                   }}
                 >
-                  {message.content === "" && message.function_call != undefined
-                    ? typeof message.function_call === "object"
-                      ? message.function_call.name
-                      : message.function_call
-                    : message.content}
+                  {renderMessage(message)}
                 </ReactMarkdown>
               </div>
             </div>
