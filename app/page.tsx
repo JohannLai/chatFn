@@ -28,21 +28,42 @@ export default function Chat() {
     functionCall,
   ) => {
     let parsedFunctionCallArguments = {} as any;
-    if (functionCall.arguments) {
-      parsedFunctionCallArguments = JSON.parse(functionCall.arguments);
+    const { name, arguments: args } = functionCall;
+    if (args) {
+      parsedFunctionCallArguments = JSON.parse(args);
     }
 
     console.log("functionCallHandler");
     console.log(functionCall, chatMessages);
 
+    let result;
+
+    if (name === "eval_code_in_browser") {
+      result = JSON.stringify(eval(parsedFunctionCallArguments.code));
+    }
+
+    const response = await fetch("/api/functions", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(functionCall),
+    });
+
+    if (!response.ok) {
+      toast.error("Something went wrong.");
+      return;
+    }
+
+    result = await response.text();
     return {
       messages: [
         ...chatMessages,
         {
           id: nanoid(),
-          name: "eval_code_in_browser",
+          name: functionCall.name,
           role: "function" as const,
-          content: JSON.stringify(eval(parsedFunctionCallArguments.code)),
+          content: result,
         },
       ],
     };
