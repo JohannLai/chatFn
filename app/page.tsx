@@ -126,6 +126,10 @@ export default function Chat() {
         : message.function_call;
     }
 
+    if (message.role === "function") {
+      return `**Result**: ${message.content}`;
+    }
+
     return message.content;
   };
 
