@@ -158,7 +158,7 @@ export default function Chat() {
                   }}
                 >
                   {message.content === "" && message.function_call != undefined
-                    ? `Calling Function **${message.function_call.name}**`
+                    ? `Calling Function **${message.function_call}**`
                     : message.content}
                 </ReactMarkdown>
               </div>
