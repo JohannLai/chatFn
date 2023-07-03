@@ -2,10 +2,11 @@
 
 import { useRef } from "react";
 import { useChat } from "ai/react";
-import { FunctionCallHandler, ChatRequest } from "ai";
+import { FunctionCallHandler, nanoid } from "ai";
+import type { JSX } from "react";
 import va from "@vercel/analytics";
 import clsx from "clsx";
-import { GithubIcon, LoadingCircle, SendIcon } from "./icons";
+import { GithubIcon, LoadingCircle, SendIcon, FunctionIcon } from "./icons";
 import { Bot, User } from "lucide-react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
@@ -26,10 +27,45 @@ export default function Chat() {
     chatMessages,
     functionCall,
   ) => {
-    console.log(123123123);
+    let parsedFunctionCallArguments = {} as any;
+    const { name, arguments: args } = functionCall;
+    if (args) {
+      parsedFunctionCallArguments = JSON.parse(args);
+    }
+
+    console.log("functionCallHandler");
     console.log(functionCall, chatMessages);
+
+    let result;
+
+    if (name === "eval_code_in_browser") {
+      result = JSON.stringify(eval(parsedFunctionCallArguments.code));
+    }
+
+    const response = await fetch("/api/functions", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(functionCall),
+    });
+
+    if (!response.ok) {
+      toast.error("Something went wrong.");
+      return;
+    }
+
+    result = await response.text();
     return {
-      messages: [...chatMessages],
+      messages: [
+        ...chatMessages,
+        {
+          id: nanoid(),
+          name: functionCall.name,
+          role: "function" as const,
+          content: result,
+        },
+      ],
     };
   };
 
@@ -54,6 +90,30 @@ export default function Chat() {
 
   const disabled = isLoading || input.length === 0;
 
+  const roleUIConfig: {
+    [key: string]: {
+      avatar: JSX.Element;
+      bgColor: string;
+      avatarColor: string;
+    };
+  } = {
+    user: {
+      avatar: <User width={20} />,
+      bgColor: "bg-white",
+      avatarColor: "bg-black",
+    },
+    assistant: {
+      avatar: <Bot width={20} />,
+      bgColor: "bg-gray-100",
+      avatarColor: "bg-green-500",
+    },
+    function: {
+      avatar: <FunctionIcon className="w-[20px]" />,
+      bgColor: "bg-gray-200",
+      avatarColor: "bg-blue-500",
+    },
+  };
+
   return (
     <main className="flex flex-col items-center justify-between pb-40">
       <div className="absolute top-5 hidden w-full justify-between px-5 sm:flex">
@@ -69,42 +129,42 @@ export default function Chat() {
         </a>
       </div>
       {messages.length > 0 ? (
-        messages.map((message, i) => (
-          <div
-            key={i}
-            className={clsx(
-              "flex w-full items-center justify-center border-b border-gray-200 py-8",
-              message.role === "user" ? "bg-white" : "bg-gray-100",
-            )}
-          >
-            <div className="flex w-full max-w-screen-md items-start space-x-4 px-5 sm:px-0">
-              <div
-                className={clsx(
-                  "p-1.5 text-white",
-                  message.role === "assistant" ? "bg-green-500" : "bg-black",
-                )}
-              >
-                {message.role === "user" ? (
-                  <User width={20} />
-                ) : (
-                  <Bot width={20} />
-                )}
+        messages.map((message, i) => {
+          return (
+            <div
+              key={i}
+              className={clsx(
+                "flex w-full items-center justify-center border-b border-gray-200 py-8",
+                roleUIConfig[message.role].bgColor,
+              )}
+            >
+              <div className="flex w-full max-w-screen-md items-start space-x-4 px-5 sm:px-0">
+                <div
+                  className={clsx(
+                    "p-1.5 text-white",
+                    roleUIConfig[message.role].avatarColor,
+                  )}
+                >
+                  {roleUIConfig[message.role].avatar}
+                </div>
+                <ReactMarkdown
+                  className="prose mt-1 w-full break-words prose-p:leading-relaxed"
+                  remarkPlugins={[remarkGfm]}
+                  components={{
+                    // open links in new tab
+                    a: (props) => (
+                      <a {...props} target="_blank" rel="noopener noreferrer" />
+                    ),
+                  }}
+                >
+                  {message.content === "" && message.function_call != undefined
+                    ? `Calling Function **${message.function_call.name}**`
+                    : message.content}
+                </ReactMarkdown>
               </div>
-              <ReactMarkdown
-                className="prose mt-1 w-full break-words prose-p:leading-relaxed"
-                remarkPlugins={[remarkGfm]}
-                components={{
-                  // open links in new tab
-                  a: (props) => (
-                    <a {...props} target="_blank" rel="noopener noreferrer" />
-                  ),
-                }}
-              >
-                {message.content}
-              </ReactMarkdown>
             </div>
-          </div>
-        ))
+          );
+        })
       ) : (
         <div className="border-gray-200sm:mx-0 mx-5 mt-20 max-w-screen-md rounded-md border sm:w-full">
           <div className="flex flex-col space-y-4 p-7 sm:p-10">
@@ -229,9 +289,8 @@ export default function Chat() {
             rel="noopener noreferrer"
             className="transition-colors hover:text-black"
           >
-            View the repo
+            View the repo <GithubIcon />
           </a>{" "}
-          or .
         </p>
       </div>
     </main>

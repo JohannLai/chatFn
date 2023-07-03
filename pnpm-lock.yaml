@@ -24,8 +24,8 @@ dependencies:
     specifier: ^0.2.2
     version: 0.2.2
   ai:
-    specifier: ^2.1.10
-    version: 2.1.10(react@18.2.0)(svelte@3.59.2)(vue@3.3.4)
+    specifier: ^2.1.12
+    version: 2.1.12(react@18.2.0)(svelte@3.59.2)(vue@3.3.4)
   autoprefixer:
     specifier: 10.4.14
     version: 10.4.14(postcss@8.4.24)
@@ -54,8 +54,8 @@ dependencies:
     specifier: ^1.1.0
     version: 1.1.0
   openai-function-calling-tools:
-    specifier: ^5.0.6
-    version: 5.0.6
+    specifier: ^6.0.0
+    version: 6.0.0
   postcss:
     specifier: 8.4.24
     version: 8.4.24
@@ -621,8 +621,8 @@ packages:
     hasBin: true
     dev: false
 
-  /ai@2.1.10(react@18.2.0)(svelte@3.59.2)(vue@3.3.4):
-    resolution: {integrity: sha512-/XWM3qHacUtm2jqgm5eHzUSQe/FTyfDGLls8dDULPGXfgKvsdjMt1isaiMQ8eanIMS2iXAZcuBwUoobomOWjhA==}
+  /ai@2.1.12(react@18.2.0)(svelte@3.59.2)(vue@3.3.4):
+    resolution: {integrity: sha512-byLD7SQtRTUqIxNPYLrk7ckZZ3KwOrwbBbdT92IESC9Fj5Vl9uFDWZJo4uC11Ja6l2EtDaCPtTnc2aOcfoOdtA==}
     engines: {node: '>=14.6'}
     peerDependencies:
       react: ^18.2.0
@@ -2862,8 +2862,8 @@ packages:
     engines: {node: '>=12'}
     dev: false
 
-  /openai-function-calling-tools@5.0.6:
-    resolution: {integrity: sha512-gmef/1ORIiaqGuiVg4HlUPvaoT5fGyj4rDbQMWj94cIPPxeP0NIFCnU9f8vsrfMQOKpWOnkhxbVXFbPph37AGg==}
+  /openai-function-calling-tools@6.0.0:
+    resolution: {integrity: sha512-QX0ciGfjS0WnuuiRtQ2/no38Cr8KpiMbXxSy4JBTOzVZb679Gc2MDbS4JyfbWAjoVQyiKMSHLofff5hS+9nUoQ==}
     dependencies:
       cheerio: 1.0.0-rc.12
       esprima: 4.0.1
