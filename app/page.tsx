@@ -4,6 +4,7 @@ import { useRef } from "react";
 import { useChat } from "ai/react";
 import { FunctionCallHandler, Message, nanoid } from "ai";
 import type { JSX } from "react";
+import { useState } from "react";
 import va from "@vercel/analytics";
 import clsx from "clsx";
 import { GithubIcon, LoadingCircle, SendIcon, FunctionIcon } from "./icons";
@@ -22,6 +23,7 @@ const examples = [
 export default function Chat() {
   const formRef = useRef<HTMLFormElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
+  const [isExpanded, setIsExpanded] = useState(false);
 
   const functionCallHandler: FunctionCallHandler = async (
     chatMessages,
@@ -38,7 +40,7 @@ export default function Chat() {
 
     let result;
 
-    if (name === "eval_code_in_browser") {
+    if (name === "eval_code") {
       result = JSON.stringify(eval(parsedFunctionCallArguments.code));
     } else {
       const response = await fetch("/api/functions", {
@@ -167,10 +169,11 @@ export default function Chat() {
                   {roleUIConfig[message.role].avatar}
                 </div>
                 <ReactMarkdown
-                  className="prose mt-1 w-full break-words prose-p:leading-relaxed"
+                  className={`prose mt-1 w-full break-words prose-p:leading-relaxed ${
+                    isExpanded ? "" : "read-more"
+                  }`}
                   remarkPlugins={[remarkGfm]}
                   components={{
-                    // open links in new tab
                     a: (props) => (
                       <a {...props} target="_blank" rel="noopener noreferrer" />
                     ),
@@ -304,10 +307,10 @@ export default function Chat() {
             href="https://github.com/JohannLai/chatFn"
             target="_blank"
             rel="noopener noreferrer"
-            className="transition-colors hover:text-black"
+            className="flex items-center justify-center transition-colors hover:text-black"
           >
             View the repo <GithubIcon />
-          </a>{" "}
+          </a>
         </p>
       </div>
     </main>

@@ -37,14 +37,16 @@ const functions: ChatCompletionFunctions[] = [
   webbrowserSchema,
   googleCustomSearchSchema,
   {
-    name: 'eval_code_in_browser',
-    description: 'Execute javascript code in the browser with eval().',
+    name: 'eval_code',
+    description: 'Execute javascript code with eval().',
     parameters: {
       type: 'object',
       properties: {
         code: {
           type: 'string',
-          description: `Javascript code that will be directly executed via eval(). Do not use backticks in your response.
+          description: `Javascript code that will be directly executed via eval(). 
+           The Code cannot attach the global scope and context, and will be executed in a sandboxed environment, you must put the variables or context you want into the code to use in the arguments object.
+           Do not use backticks in your response.
            DO NOT include any newlines in your response, and be sure to provide only valid JSON when providing the arguments object.
            The output of the eval() will be returned directly by the function.`
         }
