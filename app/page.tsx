@@ -18,6 +18,7 @@ const examples = [
   "What time is it in New York?",
   "Get me the top 5 stories on Hacker News in markdown table format. Use columns like title, link, score, and comments.",
   "What is the result of 100 * 100?",
+  "You can touch the website JavaScript Context, please put a red square at the top left corner of the screen.",
 ];
 
 export default function Chat() {
