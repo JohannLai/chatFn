@@ -16,9 +16,9 @@ import { Collapse } from "./collapse";
 
 const examples = [
   "What time is it in New York?",
+  "You can touch the website JavaScript Context, please put a red square at the top left corner of the screen.",
   "Get me the top 5 stories on Hacker News in markdown table format. Use columns like title, link, score, and comments.",
   "What is the result of 100 * 100?",
-  "You can touch the website JavaScript Context, please put a red square at the top left corner of the screen.",
 ];
 
 export default function Chat() {
@@ -210,8 +210,8 @@ export default function Chat() {
           );
         })
       ) : (
-        <div className="border-gray-200sm:mx-0 mx-5 mt-20 max-w-screen-md rounded-md border sm:w-full">
-          <div className="flex flex-col space-y-4 p-7 sm:p-10">
+        <div className="mx-5 mt-20 max-w-screen-md rounded-md border border-gray-200 sm:mx-0 sm:w-full">
+          <div className="flex flex-col space-y-1 p-2 sm:p-10">
             <h1 className="text-lg font-semibold text-black">
               Welcome to ChatFn!
             </h1>
