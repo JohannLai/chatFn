@@ -4,7 +4,6 @@ import { useRef } from "react";
 import { useChat } from "ai/react";
 import { FunctionCallHandler, Message, nanoid } from "ai";
 import type { JSX } from "react";
-import { useState } from "react";
 import va from "@vercel/analytics";
 import clsx from "clsx";
 import { GithubIcon, LoadingCircle, SendIcon, FunctionIcon } from "./icons";
@@ -13,6 +12,7 @@ import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import Textarea from "react-textarea-autosize";
 import { toast } from "sonner";
+import { Collapse } from "./collapse";
 
 const examples = [
   "What time is it in New York?",
@@ -23,7 +23,6 @@ const examples = [
 export default function Chat() {
   const formRef = useRef<HTMLFormElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
-  const [isExpanded, setIsExpanded] = useState(false);
 
   const functionCallHandler: FunctionCallHandler = async (
     chatMessages,
@@ -98,41 +97,57 @@ export default function Chat() {
       avatar: JSX.Element;
       bgColor: string;
       avatarColor: string;
+      // eslint-disable-next-line no-unused-vars
+      dialogComponent: (message: Message) => JSX.Element;
     };
   } = {
     user: {
       avatar: <User width={20} />,
       bgColor: "bg-white",
       avatarColor: "bg-black",
+      dialogComponent: (message: Message) => (
+        <ReactMarkdown
+          className="prose mt-1 w-full break-words prose-p:leading-relaxed"
+          remarkPlugins={[remarkGfm]}
+          components={{
+            a: (props) => (
+              <a {...props} target="_blank" rel="noopener noreferrer" />
+            ),
+          }}
+        >
+          {message.content}
+        </ReactMarkdown>
+      ),
     },
     assistant: {
       avatar: <Bot width={20} />,
       bgColor: "bg-gray-100",
       avatarColor: "bg-green-500",
+      dialogComponent: (message: Message) => (
+        <ReactMarkdown
+          className="prose mt-1 w-full break-words prose-p:leading-relaxed"
+          remarkPlugins={[remarkGfm]}
+          components={{
+            a: (props) => (
+              <a {...props} target="_blank" rel="noopener noreferrer" />
+            ),
+          }}
+        >
+          {message.content}
+        </ReactMarkdown>
+      ),
     },
     function: {
       avatar: <FunctionIcon className="w-[20px]" />,
       bgColor: "bg-gray-200",
       avatarColor: "bg-blue-500",
+      dialogComponent: (message: Message) => (
+        <div className="flex flex-col">
+          <div>Result</div>
+          <Collapse text={message.content} />
+        </div>
+      ),
     },
-  };
-
-  const renderMessage = (message: Message) => {
-    if (message.content === "" && message.function_call != undefined) {
-      return typeof message.function_call === "object"
-        ? `
-**Function calling** \n
-- name: ${message.function_call.name || "--"} \n
-- args: ${message.function_call.arguments || "--"}
-        `
-        : message.function_call;
-    }
-
-    if (message.role === "function") {
-      return `**Result**: ${message.content}`;
-    }
-
-    return message.content;
   };
 
   return (
@@ -168,19 +183,27 @@ export default function Chat() {
                 >
                   {roleUIConfig[message.role].avatar}
                 </div>
-                <ReactMarkdown
-                  className={`prose mt-1 w-full break-words prose-p:leading-relaxed ${
-                    isExpanded ? "" : "read-more"
-                  }`}
-                  remarkPlugins={[remarkGfm]}
-                  components={{
-                    a: (props) => (
-                      <a {...props} target="_blank" rel="noopener noreferrer" />
-                    ),
-                  }}
-                >
-                  {renderMessage(message)}
-                </ReactMarkdown>
+                {message.content === "" &&
+                message.function_call != undefined ? (
+                  typeof message.function_call === "object" ? (
+                    <div className="flex flex-col">
+                      <div>
+                        Using{" "}
+                        <span className="font-bold">
+                          {message.function_call.name}
+                        </span>{" "}
+                        ...
+                      </div>
+                      <div className="text-sm text-gray-500">
+                        {message.function_call.arguments}
+                      </div>
+                    </div>
+                  ) : (
+                    <div>{message.function_call}</div>
+                  )
+                ) : (
+                  roleUIConfig[message.role].dialogComponent(message)
+                )}
               </div>
             </div>
           );

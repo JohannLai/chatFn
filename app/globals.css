@@ -2,9 +2,12 @@
 @tailwind components;
 @tailwind utilities;
 
-.read-more {
-  display: -webkit-box;
-  -webkit-line-clamp: 4;
-  -webkit-box-orient: vertical;
+.show {
+  max-height: 1000px;
+}
+
+.transition-height {
+  max-height: 0;
   overflow: hidden;
+  transition: max-height 0.5s ease-in-out;
 }

@@ -11,6 +11,7 @@
     "format": "prettier \"**/*.{css,js,json,jsx,ts,tsx}\""
   },
   "dependencies": {
+    "@tailwindcss/line-clamp": "^0.4.4",
     "@types/node": "20.3.1",
     "@types/react": "18.2.14",
     "@types/react-dom": "18.2.6",
