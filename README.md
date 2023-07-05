@@ -17,7 +17,7 @@
 
 ## Introduction
 
-ChatFn is an open-source AI chatbot that uses [OpenAI Functions](https://platform.openai.com/docs/guides/gpt/function-calling), the [Vercel AI SDK](https://sdk.vercel.ai/docs) and [openai-function-calling-tools](https://github.com/JohannLai/openai-function-calling-tools) 
+ChatFn is an open-source AI chatbot that uses 🔥 [openai-function-calling-tools](https://github.com/JohannLai/openai-function-calling-tools) - a library to make calling OpenAI functions calling easier.
 
 https://github.com/JohannLai/chatFn/assets/10769405/de765b48-ec48-43f4-affe-a098e34580d3
 
