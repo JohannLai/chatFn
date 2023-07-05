@@ -57,8 +57,8 @@ dependencies:
     specifier: ^1.1.0
     version: 1.1.0
   openai-function-calling-tools:
-    specifier: ^6.0.0
-    version: 6.0.0
+    specifier: ^6.1.1
+    version: 6.1.1
   postcss:
     specifier: 8.4.24
     version: 8.4.24
@@ -2873,8 +2873,8 @@ packages:
     engines: {node: '>=12'}
     dev: false
 
-  /openai-function-calling-tools@6.0.0:
-    resolution: {integrity: sha512-QX0ciGfjS0WnuuiRtQ2/no38Cr8KpiMbXxSy4JBTOzVZb679Gc2MDbS4JyfbWAjoVQyiKMSHLofff5hS+9nUoQ==}
+  /openai-function-calling-tools@6.1.1:
+    resolution: {integrity: sha512-JZzmJmyVvEktQZDB5+HXE3XGHS39FSygiyAOQlBnIV+u3OIA+lSjasxLJiPDEbA0yJu+ARbuAgmfebP5BT3bYQ==}
     dependencies:
       cheerio: 1.0.0-rc.12
       esprima: 4.0.1

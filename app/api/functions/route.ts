@@ -3,6 +3,7 @@ import {
   createClock,
   createWebBrowser,
   createGoogleCustomSearch,
+  createShowPoisOnMap,
   createRequest,
 } from "openai-function-calling-tools";
 
@@ -15,6 +16,9 @@ const [googleCustomSearch] =
     apiKey: process.env.GOOGLE_API_KEY || "",
     googleCSEId: process.env.GOOGLE_SEARCH_ENGINE_ID || "",
   });
+const [showPoisOnMap] = createShowPoisOnMap({
+  mapboxAccessToken: process.env.MAPBOX_ACCESS_TOKEN || "",
+});
 
 export async function POST(req: Request) {
   const { name, arguments: args } = await req.json()
@@ -39,6 +43,9 @@ export async function POST(req: Request) {
       break;
     case 'googleCustomSearch':
       result = await googleCustomSearch(parsedArgs)
+      break;
+    case 'showPoisOnMap':
+      result = await showPoisOnMap(parsedArgs)
       break;
     default:
       return new Response("Function not found", {

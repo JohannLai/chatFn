@@ -10,6 +10,7 @@ import {
   createWebBrowser,
   createGoogleCustomSearch,
   createRequest,
+  createShowPoisOnMap
 } from "openai-function-calling-tools";
 
 const [, calculatorSchema] = createCalculator();
@@ -21,6 +22,9 @@ const [, googleCustomSearchSchema] =
     apiKey: process.env.GOOGLE_API_KEY || "",
     googleCSEId: process.env.GOOGLE_SEARCH_ENGINE_ID || "",
   });
+const [, showPoisOnMapSchema] = createShowPoisOnMap({
+  mapboxAccessToken: process.env.MAPBOX_ACCESS_TOKEN || "",
+});
 
 // Create an OpenAI API client (that's edge friendly!)
 const config = new Configuration({
@@ -35,6 +39,7 @@ const functions: ChatCompletionFunctions[] = [
   clockSchema,
   requestSchema,
   webbrowserSchema,
+  showPoisOnMapSchema,
   googleCustomSearchSchema,
   {
     name: 'eval_code',

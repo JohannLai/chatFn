@@ -16,6 +16,7 @@ import { Collapse } from "./collapse";
 
 const examples = [
   "What time is it in New York?",
+  "Show me the map of New York.",
   "You can touch the website JavaScript Context, please put a red square at the top left corner of the screen.",
   "Get me the top 5 stories on Hacker News in markdown table format. Use columns like title, link, score, and comments.",
   "What is the result of 100 * 100?",
