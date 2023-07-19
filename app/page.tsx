@@ -161,6 +161,7 @@ export default function Chat() {
         <a
           href="/github"
           target="_blank"
+          data-umami-event="chatFn github link top"
           className="rounded-lg p-2 transition-colors duration-200 hover:bg-stone-100 sm:bottom-auto"
         >
           <GithubIcon />
@@ -288,6 +289,7 @@ export default function Chat() {
             className="w-full pr-10 focus:outline-none"
           />
           <button
+            data-umami-event="send message button"
             className={clsx(
               "absolute inset-y-0 right-3 my-auto flex h-8 w-8 items-center justify-center rounded-md transition-all",
               disabled
@@ -315,6 +317,7 @@ export default function Chat() {
             target="_blank"
             rel="noopener noreferrer"
             className="transition-colors hover:text-black"
+            data-umami-event="Tools github link"
           >
             OpenAI Functions Calling Tools
           </a>{" "}
@@ -333,6 +336,7 @@ export default function Chat() {
             target="_blank"
             rel="noopener noreferrer"
             className="flex items-center justify-center transition-colors hover:text-black"
+            data-umami-event="chatFn github link bottom"
           >
             View the repo <GithubIcon />
           </a>
