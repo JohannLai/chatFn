@@ -223,6 +223,7 @@ export default function Chat() {
                 href="https://github.com/JohannLai/chatFn"
                 target="_blank"
                 rel="noopener noreferrer"
+                data-umami-event="chatFn github link text"
                 className="font-medium underline underline-offset-4 transition-colors hover:text-black"
               >
                 open-source
@@ -232,6 +233,7 @@ export default function Chat() {
                 href="https://github.com/JohannLai/openai-function-calling-tools"
                 target="_blank"
                 rel="noopener noreferrer"
+                data-umami-event="tools github link text"
                 className="font-medium underline underline-offset-4 transition-colors hover:text-black"
               >
                 OpenAI Functions Library
