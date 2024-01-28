@@ -5,6 +5,7 @@ import {
   createGoogleCustomSearch,
   createShowPoisOnMap,
   createRequest,
+  createReverseGeocode
 } from "openai-function-calling-tools";
 
 const [calculator] = createCalculator();
@@ -17,6 +18,9 @@ const [googleCustomSearch] =
     googleCSEId: process.env.GOOGLE_SEARCH_ENGINE_ID || "",
   });
 const [showPoisOnMap] = createShowPoisOnMap({
+  mapboxAccessToken: process.env.MAPBOX_ACCESS_TOKEN || "",
+});
+const [reverseGeocode] = createReverseGeocode({
   mapboxAccessToken: process.env.MAPBOX_ACCESS_TOKEN || "",
 });
 
@@ -46,6 +50,9 @@ export async function POST(req: Request) {
       break;
     case 'showPoisOnMap':
       result = await showPoisOnMap(parsedArgs)
+      break;
+      case 'reverseGeocode':
+      result = await reverseGeocode(parsedArgs)
       break;
     default:
       return new Response("Function not found", {

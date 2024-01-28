@@ -1,4 +1,4 @@
-lockfileVersion: '6.1'
+lockfileVersion: '6.0'
 
 settings:
   autoInstallPeers: true
@@ -57,8 +57,8 @@ dependencies:
     specifier: ^1.1.0
     version: 1.1.0
   openai-function-calling-tools:
-    specifier: ^6.1.1
-    version: 6.1.1
+    specifier: ^6.3.3
+    version: 6.3.3
   postcss:
     specifier: 8.4.24
     version: 8.4.24
@@ -621,11 +621,6 @@ packages:
       acorn: 8.9.0
     dev: false
 
-  /acorn-walk@8.2.0:
-    resolution: {integrity: sha512-k+iyHEuPgSw6SbuDpGQM+06HQUa04DZ3o+F6CSzXMvvI5KMvnaEqXe+YVe555R9nn6GPt404fos4wcgpw12SDA==}
-    engines: {node: '>=0.4.0'}
-    dev: false
-
   /acorn@8.9.0:
     resolution: {integrity: sha512-jaVNAFBHNLXspO543WnNNPZFRtavh3skAkITqD0/2aeMkKZTN+254PyhwxFYrk3vQ1xfY+2wbesJMs/JC8/PwQ==}
     engines: {node: '>=0.4.0'}
@@ -819,7 +814,7 @@ packages:
     engines: {node: '>=8'}
 
   /boolbase@1.0.0:
-    resolution: {integrity: sha1-aN/1++YMUes3cl6p4+0xDcwed24=}
+    resolution: {integrity: sha512-JZOSA7Mo9sNGB8+UjSgzdLtokWAky1zbztM3WRLCbZ70/3cTANmQmOdR7y2g+J0e2WXywy1yS468tY+IruqEww==}
     dev: false
 
   /bplist-parser@0.2.0:
@@ -2873,8 +2868,8 @@ packages:
     engines: {node: '>=12'}
     dev: false
 
-  /openai-function-calling-tools@6.1.1:
-    resolution: {integrity: sha512-JZzmJmyVvEktQZDB5+HXE3XGHS39FSygiyAOQlBnIV+u3OIA+lSjasxLJiPDEbA0yJu+ARbuAgmfebP5BT3bYQ==}
+  /openai-function-calling-tools@6.3.3:
+    resolution: {integrity: sha512-Sy0N+SwwSujSN3RVKU72YfxOLnU0y+MDhFIZME7frrhfRtZMCoqW+PePPpKEfvJNanWg3O77ELeuEyuuM0fp9g==}
     dependencies:
       cheerio: 1.0.0-rc.12
       esprima: 4.0.1
@@ -2882,7 +2877,6 @@ packages:
       moment: 2.29.4
       moment-timezone: 0.5.43
       openai: 3.3.0
-      vm2: 3.9.19
       zod: 3.21.4
       zod-to-json-schema: 3.21.2(zod@3.21.4)
     transitivePeerDependencies:
@@ -3624,7 +3618,7 @@ packages:
     dev: false
 
   /to-fast-properties@2.0.0:
-    resolution: {integrity: sha1-3F5pjL0HkmW8c+A3doGk5Og/YW4=}
+    resolution: {integrity: sha512-/OaKK0xYrs3DmxRYqL/yDc+FxFUVYhDlXMhRmv3z915w2HF1tnN1omB354j8VUGO/hbRzyD6Y3sA7v7GS/ceog==}
     engines: {node: '>=4'}
     dev: false
 
@@ -3853,15 +3847,6 @@ packages:
       is-buffer: 2.0.5
       unist-util-stringify-position: 3.0.3
       vfile-message: 3.1.4
-    dev: false
-
-  /vm2@3.9.19:
-    resolution: {integrity: sha512-J637XF0DHDMV57R6JyVsTak7nIL8gy5KH4r1HiwWLf/4GBbb5MKL5y7LpmF4A8E2nR6XmzpmMFQ7V7ppPTmUQg==}
-    engines: {node: '>=6.0'}
-    hasBin: true
-    dependencies:
-      acorn: 8.9.0
-      acorn-walk: 8.2.0
     dev: false
 
   /vue@3.3.4:

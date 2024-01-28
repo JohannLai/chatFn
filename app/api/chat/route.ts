@@ -10,7 +10,8 @@ import {
   createWebBrowser,
   createGoogleCustomSearch,
   createRequest,
-  createShowPoisOnMap
+  createShowPoisOnMap,
+  createReverseGeocode
 } from "openai-function-calling-tools";
 
 const [, calculatorSchema] = createCalculator();
@@ -23,6 +24,9 @@ const [, googleCustomSearchSchema] =
     googleCSEId: process.env.GOOGLE_SEARCH_ENGINE_ID || "",
   });
 const [, showPoisOnMapSchema] = createShowPoisOnMap({
+  mapboxAccessToken: process.env.MAPBOX_ACCESS_TOKEN || "",
+});
+const [, reverseGeocodeSchema] = createReverseGeocode({
   mapboxAccessToken: process.env.MAPBOX_ACCESS_TOKEN || "",
 });
 
@@ -40,6 +44,7 @@ const functions: ChatCompletionFunctions[] = [
   requestSchema,
   webbrowserSchema,
   showPoisOnMapSchema,
+  reverseGeocodeSchema,
   googleCustomSearchSchema,
   {
     name: 'eval_code',
